@@ -25,6 +25,7 @@ Module.register('netatmo', {
       authEndpoint: 'oauth2/token',
       authPayload: 'grant_type=refresh_token&refresh_token={0}&client_id={1}&client_secret={2}',
       dataEndpoint: 'api/getstationsdata',
+      dataHomeCoachEndpoint: 'api/gethomecoachsdata',
       dataPayload: 'access_token={0}'
     }
   },
@@ -96,7 +97,7 @@ Module.register('netatmo', {
       this.config.refreshToken = data.refresh_token;
       // call for station data
       return Q($.ajax({
-        url: this.config.api.base + this.config.api.dataEndpoint,
+        url: this.config.api.base + this.config.api.dataHomeCoachEndpoint,
         data: this.config.api.dataPayload.format(data.access_token)
       }));
     }
@@ -136,6 +137,8 @@ Module.register('netatmo', {
         case 'Radio':
           return value.toFixed(0) + '%';
         case 'Pressure':
+          return value.toFixed(0) + ' mbar';
+        case 'AbsolutePressure':
           return value.toFixed(0) + ' mbar';
         case 'Temperature':
           return value.toFixed(1) + '°';
